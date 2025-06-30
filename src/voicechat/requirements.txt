@@ -1,0 +1,13 @@
+openai-whisper
+text2emotion
+requests
+python-dotenv
+ffmpeg-python
+google-generativeai
+pydub
+torch
+regex
+tqdm
+six
+emoji==1.7.0
+nltk
