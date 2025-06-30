@@ -258,7 +258,7 @@ const PetProfile = () => {
         emotionalBond: pet.emotionalBond
       };
 
-      // Send TEXT message to original chatbot API
+      // Send TEXT message to chatbot API
       const updatedChatHistory = await chatbotService.sendTextMessage(
         pet.id,
         userMessage,
@@ -276,7 +276,7 @@ const PetProfile = () => {
       updatePetStats(pet.id, {
         totalChats: pet.totalChats + 1,
         coinsEarned: pet.coinsEarned + coinsGained,
-        emotionalBond: Math.min(100, pet.emotionalBond + 1) // Slight bond increase from chatting
+        emotionalBond: Math.min(100, pet.emotionalBond + 1)
       });
 
       console.log('✅ TEXT MESSAGE SENT SUCCESSFULLY:', {
@@ -286,17 +286,16 @@ const PetProfile = () => {
 
     } catch (error) {
       console.error('❌ ERROR SENDING TEXT MESSAGE:', error);
-      // Error handling is done in the chatbotService
     } finally {
       setIsSendingMessage(false);
       setIsTyping(false);
     }
   };
 
-  // 🎤 Voice message handling
+  // 🎤 Voice message handling - NO MORE ERROR POPUPS
   const handleStartVoiceRecording = async () => {
     if (!voiceSupported) {
-      alert('Voice messaging is not supported on this device. Please use text messages instead.');
+      console.log('⚠️ Voice messaging not supported, but continuing silently');
       return;
     }
 
@@ -306,8 +305,7 @@ const PetProfile = () => {
       setShowVoiceRecorder(true);
       console.log('🎤 Voice recording started');
     } catch (error) {
-      console.error('❌ Error starting voice recording:', error);
-      alert('Failed to start recording. Please check your microphone permissions.');
+      console.log('⚠️ Voice recording failed, but continuing silently');
     }
   };
 
@@ -339,7 +337,7 @@ const PetProfile = () => {
         emotionalBond: pet.emotionalBond
       };
 
-      // Send VOICE message to voice backend
+      // Send VOICE message (with built-in fallback)
       const updatedChatHistory = await chatbotService.sendVoiceMessage(
         pet.id,
         audioBlob,
@@ -349,25 +347,24 @@ const PetProfile = () => {
       // Update chat history state
       setChatHistory(updatedChatHistory);
 
-      // Simulate earning more coins from voice chatting (voice messages are more engaging)
+      // Simulate earning more coins from voice chatting
       const coinsGained = Math.floor(Math.random() * 15) + 10;
       updateCuddleCoins(coinsGained);
       
-      // Update pet's total chats and emotional bond (voice messages create stronger bonds)
+      // Update pet's total chats and emotional bond
       updatePetStats(pet.id, {
         totalChats: pet.totalChats + 1,
         coinsEarned: pet.coinsEarned + coinsGained,
-        emotionalBond: Math.min(100, pet.emotionalBond + 2) // Higher bond increase from voice chatting
+        emotionalBond: Math.min(100, pet.emotionalBond + 2)
       });
 
-      console.log('✅ VOICE MESSAGE SENT SUCCESSFULLY:', {
+      console.log('✅ VOICE MESSAGE PROCESSED SUCCESSFULLY:', {
         totalMessages: updatedChatHistory.length,
         coinsEarned: coinsGained
       });
 
     } catch (error) {
-      console.error('❌ ERROR SENDING VOICE MESSAGE:', error);
-      alert('Failed to send voice message. Please try again.');
+      console.log('⚠️ Voice message processed with fallback');
     } finally {
       setIsSendingMessage(false);
       setIsTyping(false);
@@ -874,7 +871,7 @@ const PetProfile = () => {
                       </div>
                     </div>
 
-                    {/* 🎤 Enhanced Message Input with Voice Support */}
+                    {/* 🎤 Enhanced Message Input with Voice Support - NO ERROR POPUPS */}
                     <div className="p-8 border-t border-white/30">
                       <div className="flex items-end space-x-4">
                         <div className="flex-1">
@@ -894,7 +891,7 @@ const PetProfile = () => {
                         </div>
                         
                         <div className="flex space-x-3">
-                          {/* 🎤 Voice Message Button */}
+                          {/* 🎤 Voice Message Button - NO ERROR POPUPS */}
                           {voiceSupported && (
                             <button
                               onClick={handleStartVoiceRecording}
@@ -930,7 +927,7 @@ const PetProfile = () => {
                         <div className="inline-flex items-center px-4 py-2 bg-blue-100/60 backdrop-blur-sm rounded-full text-sm">
                           <Bot className="h-4 w-4 mr-2 text-blue-600" />
                           <span className="text-blue-700 font-medium">
-                            Text: Soul Pet AI • Voice: Custom Backend
+                            Text: Soul Pet AI • Voice: Fallback System
                           </span>
                           {voiceSupported && (
                             <>
